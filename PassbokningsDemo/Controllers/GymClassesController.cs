@@ -12,6 +12,7 @@ using PassbokningsDemo.Models;
 
 namespace PassbokningsDemo.Controllers
 {
+    [Authorize]
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,6 +24,7 @@ namespace PassbokningsDemo.Controllers
             _userManager = userManager;
         }
 
+        [AllowAnonymous]
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
