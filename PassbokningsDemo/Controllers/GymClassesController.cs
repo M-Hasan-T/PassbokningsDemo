@@ -205,6 +205,7 @@ namespace PassbokningsDemo.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> History()
         {
             var gymClasses = await _context.GymClasses
@@ -213,6 +214,38 @@ namespace PassbokningsDemo.Controllers
             .ToListAsync();
 
             var model = _mapper.Map<IndexViewModel>(gymClasses);
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> MyHistory()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var historicalClasses = await _context.Users
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.AttendedClasses)
+                .Select(ac => ac.GymClass)
+                .Where(g => g.StartTime < DateTime.Now)
+                .ToListAsync();
+
+            var model = _mapper.Map<IndexViewModel>(historicalClasses);
+
+            return View(model);
+        }
+        public async Task<IActionResult> MyBookings()
+        {
+
+            var userId = _userManager.GetUserId(User);
+
+            var bookedClasses = await _context.Users
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.AttendedClasses)
+                .Select(ac => ac.GymClass)
+                .Where(g => g.StartTime > DateTime.Now)
+                .ToListAsync();
+
+            var model = _mapper.Map<IndexViewModel>(bookedClasses);
 
             return View(model);
         }

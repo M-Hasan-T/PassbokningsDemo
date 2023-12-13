@@ -8,7 +8,7 @@ namespace PassbokningsDemo.Models
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
         public DateTime TimeOfRegistration { get; set; }
-        public ICollection<ApplicationUserGymClass> AttendedMembers { get; set; }
+        public ICollection<ApplicationUserGymClass> AttendedClasses { get; set; }
 
     }
 }
